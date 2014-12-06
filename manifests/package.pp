@@ -71,26 +71,32 @@ class beaver::package (
     }
   }
 
+  case $::operatingsystem {
+    'CentOS', 'Fedora', 'Scientific', 'RedHat', 'Amazon': {
+      $os = 'redhat'
+    }
+    'Debian', 'Ubuntu': {
+      $os = 'debian'
+    }
+    default: {
+      fail("no initscript for ${::operatingsystem}")
+    }
+  }
+
   file { '/etc/init.d/beaver':
     ensure  => file,
     mode    => '0555',
-    owner   => 'root',
-    group   => 'root',
-    content => template('beaver/beaver.init.erb'),
+    content => template("beaver/beaver.init.${os}.erb"),
   }
 
   file { '/etc/beaver':
     ensure => 'directory',
     mode   => '0555',
-    owner  => 'root',
-    group  => 'root',
   }
 
   file { '/etc/beaver/conf.d':
     ensure  => 'directory',
     mode    => '0555',
-    owner   => 'root',
-    group   => 'root',
     purge   => true,
     force   => true,
     recurse => true,
