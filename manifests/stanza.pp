@@ -76,6 +76,8 @@ define beaver::stanza (
   if ($add_fields != '') {
     validate_hash($add_fields)
     $arr_add_fields = inline_template('<%= add_fields.sort.collect { |k,v| "\"#{k}\", \"#{v}\"" }.join(",") %>')
+  } else {
+    $arr_add_fields = ''
   }
 
   include beaver
