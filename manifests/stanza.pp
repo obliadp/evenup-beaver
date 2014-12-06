@@ -62,7 +62,7 @@ define beaver::stanza (
   $sincedb_write_interval = 300,
   $multiline_regex_before = '',
   $multiline_regex_after  = '',
-  $add_fields             = '',
+  $add_field              = '',
 ){
 
   $source_real = $source ? {
@@ -73,7 +73,7 @@ define beaver::stanza (
   validate_string($type, $source, $source_real)
   if type($sincedb_write_interval) != 'integer' { fail('sincedb_write_interval is not an integer') }
 
-  if ($add_fields != '') {
+  if ($add_field  != '') {
     validate_hash($add_fields)
     $arr_add_fields = inline_template('<%= add_fields.sort.collect { |k,v| "\"#{k}\", \"#{v}\"" }.join(",") %>')
   } else {
