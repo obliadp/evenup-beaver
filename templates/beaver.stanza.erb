@@ -30,7 +30,7 @@ multiline_regex_before: <%= scope.lookupvar('multiline_regex_before') %>
 <% if scope.lookupvar('multiline_regex_after') != '' -%>
 multiline_regex_after: <%= scope.lookupvar('multiline_regex_after') %>
 <% end -%>
-<% if !empty(scope.lookupvar('arr_add_fields')) -%>
+<% unless empty(scope.lookupvar('arr_add_fields')) -%>
 add_fields: <%= scope.lookupvar('arr_add_fields') %>
 <% end -%>
 
