@@ -74,7 +74,7 @@ define beaver::stanza (
   if type($sincedb_write_interval) != 'integer' { fail('sincedb_write_interval is not an integer') }
 
   if ($add_field  != '') {
-    validate_hash($add_fields)
+    validate_hash($add_field)
     $arr_add_fields = inline_template('<%= add_fields.sort.collect { |k,v| "\"#{k}\", \"#{v}\"" }.join(",") %>')
   } else {
     $arr_add_fields = ''
