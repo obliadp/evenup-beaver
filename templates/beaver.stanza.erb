@@ -24,4 +24,13 @@ exclude: (<%= scope.lookupvar('exclude').join('|') %>)
 exclude: (<%= scope.lookupvar('exclude') %>)
 <% end -%>
 <% end -%>
+<% if scope.lookupvar('multiline_regex_before') != '' -%>
+multiline_regex_before: <%= scope.lookupvar('multiline_regex_before') %>
+<% end -%>
+<% if scope.lookupvar('multiline_regex_after') != '' -%>
+multiline_regex_after: <%= scope.lookupvar('multiline_regex_after') %>
+<% end -%>
+<% if scope.lookupvar('arr_add_fields') != '' -%>
+add_fields: <%= scope.lookupvar('arr_add_fields') %>
+<% end -%>
 

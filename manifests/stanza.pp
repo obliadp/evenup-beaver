@@ -33,6 +33,15 @@
 #   String/Array of strings.  Valid python regex strings to exlude
 #   from file globs.
 #
+# [*multiline_regex_before*]
+#   String.
+#
+# [*multiline_regex_after*]
+#   String.
+#
+# [*add_fields*]
+#   Hash.
+#
 # === Authors
 #
 # * Justin Lambert <mailto:jlambert@letsevenup.com>
@@ -51,6 +60,9 @@ define beaver::stanza (
   $format                 = '',
   $exclude                = [],
   $sincedb_write_interval = 300,
+  $multiline_regex_before = '',
+  $multiline_regex_after  = '',
+  $add_fields             = '',
 ){
 
   $source_real = $source ? {
@@ -61,6 +73,11 @@ define beaver::stanza (
   validate_string($type, $source, $source_real)
   if type($sincedb_write_interval) != 'integer' { fail('sincedb_write_interval is not an integer') }
 
+  if ($add_fields != '') {
+    validate_hash($add_fields)
+    $arr_add_fields = inline_template('<%= add_fields.sort.collect { |k,v| "\"#{k}\", \"#{v}\"" }.join(",") %>')
+  }
+
   include beaver
   Class['beaver::package'] ->
   Beaver::Stanza[$name] ~>
@@ -68,9 +85,6 @@ define beaver::stanza (
 
   $filename = regsubst($name, '[/:\n]', '_', 'GM')
   file { "/etc/beaver/conf.d/${filename}":
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
     content => template("${module_name}/beaver.stanza.erb"),
     notify  => Class['beaver::service'],
   }
