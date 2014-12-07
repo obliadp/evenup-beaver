@@ -32,43 +32,15 @@ class beaver::package (
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  # Setup some variables for the virtualenv
-  $venv_environment = [
-    "PATH=${venv}/bin:\$PATH",
-    "VIRTUAL_ENV=${venv}",
-  ]
+  if !defined(Package['python-pip']) {
+    package {'python-pip': }
+  }
 
-  if $provider == 'virtualenv' {
-    python::virtualenv { $venv:
-      ensure  => present,
-      version => $python_version,
-      owner   => $user,
-      group   => $group,
-      require => Class['python'],
-    }
-
-    python::pip { $package_name:
-      ensure       => present,
-      pkgname      => $package_name,
-      virtualenv   => $venv,
-      install_args => "--download-cache ${venv}/.pip-cache",
-      owner        => 'root',
-      require      => User[$user],
-      notify       => Class['beaver::service'],
-    }
-
-    user { $user:
-      ensure     => present,
-      home       => $home,
-      managehome => true,
-      system     => true,
-    }
-  } else {
-    package { $package_name:
-      ensure   => $version,
-      provider => $provider,
-      notify   => Class['beaver::service'],
-    }
+  package { $package_name:
+    ensure   => $version,
+    require  => Package['python-pip'],
+    provider => $provider,
+    notify   => Class['beaver::service'],
   }
 
   case $::operatingsystem {
