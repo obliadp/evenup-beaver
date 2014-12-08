@@ -43,7 +43,7 @@ BEAVER_CONFD=${BEAVER_CONFD:-/etc/beaver/conf.d}
 start() {
     /usr/bin/which beaver 2>&1 > /dev/null || exit 5
     [ -f $BEAVER_CONFIG ] || exit 7
-    [ -f $BEAVER_CONFD ] || exit 8
+    [ -d $BEAVER_CONFD ] || exit 8
 
     umask 077
 
