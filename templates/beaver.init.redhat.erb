@@ -37,16 +37,18 @@ if [ -f /etc/sysconfig/$prog ] ; then
     . /etc/sysconfig/$prog
 fi
 
-BEAVER_CONFIG=${BEAVER_CONFIG:-/etc/beaver.conf -C /etc/beaver/conf.d}
+BEAVER_CONFIG=${BEAVER_CONFIG:-/etc/beaver.conf}
+BEAVER_CONFD=${BEAVER_CONFIG:-/etc/beaver/conf.d}
 
 start() {
     /usr/bin/which beaver 2>&1 > /dev/null || exit 5
     [ -f $BEAVER_CONFIG ] || exit 7
+    [ -f $BEAVER_CONFD ] || exit 8
 
     umask 077
 
     echo -n $"Starting beaver: "
-    daemon $exec -D -P $PIDFILE -c $BEAVER_CONFIG -l $LOGFILE -t redis $BEAVER_OPTIONS
+    daemon $exec -D -P $PIDFILE -c $BEAVER_CONFIG -C $BEAVER_CONFD -l $LOGFILE -t redis $BEAVER_OPTIONS
     RETVAL=$?
     echo
     [ $RETVAL -eq 0 ] && touch $lockfile
