@@ -32,13 +32,24 @@ class beaver::package (
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
-  if !defined(Package['python-pip']) {
-    package {'python-pip': }
-  }
 
+  if ($::osfamily == 'RedHat') and ($::lsbmajdistrelease == '5'){
+    if !defined(Package['python26-setuptools']) {
+      package {'python26-setuptools': }
+    }
+    exec {'easy_install pip':
+      require => Package['python26-setuptools'],
+      command => '/usr/bin/easy_install-2.6 pip',
+      creates => '/usr/bin/pip',
+    }
+  }
+  else {
+    if !defined(Package['python-pip']) {
+      package {'python-pip': }
+    }
+  }
   package { $package_name:
     ensure   => $version,
-    require  => Package['python-pip'],
     provider => $provider,
     notify   => Class['beaver::service'],
   }
