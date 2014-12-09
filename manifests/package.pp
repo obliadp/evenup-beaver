@@ -34,11 +34,11 @@ class beaver::package (
 
 
   if ($::osfamily == 'RedHat') and ($::lsbmajdistrelease == '5'){
-    if !defined(Package['python26-setuptools']) {
-      package {'python26-setuptools': }
+    if !defined(Package['python26-distribute']) {
+      package {'python26-distribute': }
     }
     exec {'easy_install pip':
-      require => Package['python26-setuptools'],
+      require => Package['python26-distribute'],
       command => '/usr/bin/easy_install-2.6 pip',
       creates => '/usr/bin/pip',
     }
