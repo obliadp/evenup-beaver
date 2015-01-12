@@ -44,6 +44,9 @@ class beaver::package (
     }
   }
   else {
+    if !defined(Package['docutils']) {
+      package {'docutils': }
+    }
     if !defined(Package['python-pip']) {
       package {'python-pip': }
     }
