@@ -45,7 +45,10 @@ class beaver::package (
   }
   else {
     if !defined(Package['docutils']) {
-      package {'docutils': }
+      package {'python-docutils':
+        require  => Package['python-pip'],
+        provider => $provider,
+      }
     }
     if !defined(Package['python-pip']) {
       package {'python-pip': }
