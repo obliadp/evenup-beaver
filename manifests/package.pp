@@ -33,21 +33,32 @@ class beaver::package (
   }
 
 
-  if ($::osfamily == 'RedHat') and ($::lsbmajdistrelease == '5'){
-    if !defined(Package['python26-distribute']) {
-      package {'python26-distribute': }
-    }
-    exec {'easy_install pip':
-      require => Package['python26-distribute'],
-      command => '/usr/bin/easy_install-2.6 pip',
-      creates => '/usr/bin/pip',
+  if ($::osfamily == 'RedHat') {
+    case $::lsbmajdistrelease {
+      '5': {
+        if !defined(Package['python26-distribute']) {
+          package {'python26-distribute': }
+        }
+        exec {'easy_install pip':
+          require => Package['python26-distribute'],
+          command => '/usr/bin/easy_install-2.6 pip',
+          creates => '/usr/bin/pip',
+        }
+      }
+      '6': {
+        if !defined(Package['docutils']) {
+          package {'docutils': }
+        }
+        exec {'upgrade pip': # hack fordi pip er brukket ved install
+          command => '/usr/bin/pip install pip=6.0.6 --upgrade',
+          creates => '/usr/lib/python2.6/site-packages/pip-6.0.6-py2.6.egg-info/installed-files.txt',
+        }
+      }
     }
   }
   else {
-    if !defined(Package['docutils']) {
-      package {'python-docutils':
-        require  => Package['python-pip'],
-      }
+    if !defined(Package['python-docutils']) {
+      package {'python-docutils': }
     }
     if !defined(Package['python-pip']) {
       package {'python-pip': }
