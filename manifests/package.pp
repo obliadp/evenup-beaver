@@ -50,7 +50,7 @@ class beaver::package (
           package {'docutils': }
         }
         exec {'upgrade pip': # hack fordi pip er brukket ved install
-          command => '/usr/bin/pip install pip=6.0.6 --upgrade',
+          command => '/usr/bin/pip install pip==6.0.6 --upgrade',
           creates => '/usr/lib/python2.6/site-packages/pip-6.0.6-py2.6.egg-info/installed-files.txt',
         }
       }
