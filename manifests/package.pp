@@ -49,7 +49,11 @@ class beaver::package (
         if !defined(Package['docutils']) {
           package {'docutils': }
         }
+        if !defined(Package['python-pip']) {
+          package {'python-pip': }
+        }
         exec {'upgrade pip': # hack fordi pip er brukket ved install
+          require => Package['python-pip'],
           command => '/usr/bin/pip install pip==6.0.6 --upgrade',
           creates => '/usr/lib/python2.6/site-packages/pip-6.0.6-py2.6.egg-info/installed-files.txt',
         }
