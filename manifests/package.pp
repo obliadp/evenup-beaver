@@ -46,9 +46,6 @@ class beaver::package (
         }
       }
       '6': {
-        if !defined(Package['docutils']) {
-          package {'docutils': }
-        }
         if !defined(Package['python-pip']) {
           package {'python-pip': }
         }
@@ -58,12 +55,10 @@ class beaver::package (
           creates => '/usr/lib/python2.6/site-packages/pip-6.0.6-py2.6.egg-info/installed-files.txt',
         }
       }
+      default: {}
     }
   }
   else {
-    if !defined(Package['python-docutils']) {
-      package {'python-docutils': }
-    }
     if !defined(Package['python-pip']) {
       package {'python-pip': }
     }
