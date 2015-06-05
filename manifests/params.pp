@@ -21,7 +21,7 @@ class beaver::params {
   $package_name           = 'beaver'
   $package_provider       = 'pip'
   $python_version         = '2.7'
-  $version                = '33.2.0'
+  $version                = '33.3.0'
   $redis_host             = 'localhost'
   $redis_db               = 0
   $redis_port             = 6379
